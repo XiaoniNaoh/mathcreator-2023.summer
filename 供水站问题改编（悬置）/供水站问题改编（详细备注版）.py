@@ -178,3 +178,28 @@ print("sum_pipeline_A_V={}, sum_pipeline_A_V_P={}, sum_pipeline_A_V_P - sum_pipe
                                                                                                     sum_pipeline_A_V_P,
                                                                                                     sum_pipeline_A_V_P - sum_pipeline_A_V))
 plt.show()
+
+def check_distance(coordinate_A_V, coordinate_A_V_P):
+    # 计算一级站点与二级站点之间的距离
+    distance_A_V_P = Distance(coordinate_A_V_P)
+    # 初始化一个变量，用于记录所有的二级站点是否都正常
+    all_normal = True
+    # 遍历所有的二级站点
+    for i in range(13, len(coordinate_A_V_P)):
+        # 找出每个二级站点距离最近的一级站点
+        min_distance = min(distance_A_V_P[i][:13])
+        if min_distance > 30:
+            print(f"警告：二级站点{i}距离最近的一级站点的距离超过30，具体距离为{min_distance}")
+            all_normal = False
+        else:
+            print(f"正常：二级站点{i}距离最近的一级站点的距离等于或小于30，具体距离为{min_distance}")
+    # 检查所有的二级站点是否都正常
+    if all_normal:
+        print("全部正常：所有二级站点距离最近的一级站点的距离都等于或小于30。")
+    else:
+        print("存在警告：有些二级站点距离最近的一级站点的距离超过30。")
+
+# 在计算AVP站点之间的最优路线之后调用这个函数
+route_A_V_P = Prim(coordinate_A_V_P)[0]
+print(route_A_V_P)
+check_distance(coordinate_A_V, coordinate_A_V_P)
